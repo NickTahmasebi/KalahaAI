@@ -72,6 +72,6 @@ while not is_game_over():
         else:
             player = 1
     else:
-        print("Invalid move. Please try again.")
+        print("Invalid move. Please try again. ")
 print_board()
 determine_winner()
