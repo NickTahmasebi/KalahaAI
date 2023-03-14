@@ -47,30 +47,7 @@ def is_game_over():
         return False
 
 # Function to determine the winner
-def determine_winner():
-    if board[6] > board[13]:
-        print("Player 1 wins!")
-    elif board[6] < board[13]:
-        print("Player 2 wins!")
-    else:
-        print("It's a tie!")
 
-# Main game loop
-player = 1
-while not is_game_over():
-    print_board()
-    hole = int(input("Player " + str(player) + ", choose a hole (0-5 or 7-12): "))
-    if is_valid_move(player, hole):
-        make_move(player, hole)
-        if player == 1:
-            player = 2
-        else:
-            player = 1
-    else:
-        print("Invalid move. Please try again. ")
-
-print_board()
-determine_winner()
 
 
 def evaluate(board):
@@ -87,29 +64,29 @@ def generate_moves(board):
 
 def apply_move(board, move):
     """Apply the selected move to the current state of the game."""
-    player = board[14]  # current player
+    player = board[13]  # current player
     nextBoard = board.copy()
     seeds = nextBoard[move]
     nextBoard[move] = 0
     i = move + 1
     while seeds > 0:
-        if i == 13 and player == 0:
+        if i == 12 and player == 0:
             i = 0
-        elif i == 6 and player == 1:
+        elif i == 5 and player == 1:
             i = 7
         nextBoard[i] += 1
         seeds -= 1
         i = (i + 1) % 14
-    if i == 6 and player == 0:  # last seed lands in player's Kalaha
-        nextBoard[6] += 1
-    elif i == 13 and player == 1:  # last seed lands in opponent's Kalaha
-        nextBoard[13] += 1
-    elif nextBoard[i] == 1 and ((i < 6 and player == 0) or (i > 6 and i < 13 and player == 1)):
+    if i == 5 and player == 0:  # last seed lands in player's Kalaha
+        nextBoard[5] += 1
+    elif i == 12 and player == 1:  # last seed lands in opponent's Kalaha
+        nextBoard[12] += 1
+    elif nextBoard[i] == 1 and ((i < 5 and player == 0) or (i > 5 and i < 12 and player == 1)):
         # last seed lands in an empty pit on player's side
-        opposite = 12 - i
-        nextBoard[player * 7 + 6] += nextBoard[opposite] + 1
+        opposite = 11 - i
+        nextBoard[player * 7 + 5] += nextBoard[opposite] + 1
         nextBoard[opposite] = 0
-    nextBoard[14] = 1 - player  # switch player
+    nextBoard[13] = 1 - player  # switch player
     return nextBoard
 
 def minimax(board, depth, maximizingPlayer):
@@ -145,9 +122,40 @@ def choose_move(board, depth):
     return bestMove
 
 # Example usage
-state = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0]  # starting state
-print("Current state:", state)
-move = choose_move(state, 3)
-print("Best move:", move)
-nextState = apply_move(state, move)
-print("Next state:", nextState)
+# state = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0]  # starting state
+# print("Current state:", state)
+# move = choose_move(state, 3)
+# print("Best move:", move)
+# nextState = apply_move(state, move)
+# print("Next state:", nextState)
+
+
+
+def determine_winner():
+    if board[6] > board[13]:
+        print("Player 1 wins!")
+    elif board[6] < board[13]:
+        print("Player 2 wins!")
+    else:
+        print("It's a tie!")
+
+
+# Main game loop
+player = 1
+while not is_game_over():
+    print_board()
+    move = choose_move(board, 8)
+    print("Best move:", move)
+
+    hole = int(input("Player " + str(player) + ", choose a hole (0-5 or 7-12): "))
+    if is_valid_move(player, hole):
+        make_move(player, hole)
+        if player == 1:
+            player = 2
+        else:
+            player = 1
+    else:
+        print("Invalid move. Please try again. ")
+
+print_board()
+determine_winner()
