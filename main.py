@@ -118,15 +118,15 @@ def minimax(board, depth, maximizingPlayer):
         return evaluate(board)
     if maximizingPlayer:
         bestValue = -float("inf")
-        for move in generate_moves(state):
-            nextBoard = apply_move(state, move)
+        for move in generate_moves(board):
+            nextBoard = apply_move(board, move)
             value = minimax(nextBoard, depth-1, False)
             bestValue = max(bestValue, value)
         return bestValue
     else:
         bestValue = float("inf")
-        for move in generate_moves(state):
-            nextBoard = apply_move(state, move)
+        for move in generate_moves(board):
+            nextBoard = apply_move(board, move)
             value = minimax(nextBoard, depth-1, True)
             bestValue = min(bestValue, value)
         return bestValue
@@ -137,7 +137,7 @@ def choose_move(board, depth):
     bestValue = -float("inf")
     bestMove = None
     for move in moves:
-        nextBoard = apply_move(state, move)
+        nextBoard = apply_move(board, move)
         value = minimax(nextBoard, depth-1, False)
         if value > bestValue:
             bestValue = value
