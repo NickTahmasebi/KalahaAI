@@ -35,14 +35,9 @@ def make_move(player, hole):
             continue
         board[hole] += 1
         stones -= 1
-    if player == 1 and hole < 6 and board[hole] == 1:
-        board[6] += board[12 - hole] + 1
-        board[12 - hole] = 0
-        board[hole] = 0
-    elif player == 2 and hole > 6 and hole < 13 and board[hole] == 1:
-        board[13] += board[12 - hole] + 1
-        board[12 - hole] = 0
-        board[hole] = 0
+
+
+
 
 # Function to check if the game is over
 def is_game_over():
@@ -73,5 +68,86 @@ while not is_game_over():
             player = 1
     else:
         print("Invalid move. Please try again. ")
+
 print_board()
 determine_winner()
+
+
+def evaluate(board):
+    """Evaluate the current state of the board."""
+    return board[6] - board[13]  # difference between player's Kalaha and opponent's Kalaha
+
+def generate_moves(board):
+    """Generate all possible moves for the current player."""
+    moves = []
+    for i in range(6):
+        if board[i] != 0:
+            moves.append(i)
+    return moves
+
+def apply_move(board, move):
+    """Apply the selected move to the current state of the game."""
+    player = state[14]  # current player
+    nextBoard = board.copy()
+    seeds = nextState[move]
+    nextBoard[move] = 0
+    i = move + 1
+    while seeds > 0:
+        if i == 13 and player == 0:
+            i = 0
+        elif i == 6 and player == 1:
+            i = 7
+        nextBoard[i] += 1
+        seeds -= 1
+        i = (i + 1) % 14
+    if i == 6 and player == 0:  # last seed lands in player's Kalaha
+        nextBoard[6] += 1
+    elif i == 13 and player == 1:  # last seed lands in opponent's Kalaha
+        nextBoard[13] += 1
+    elif nextBoard[i] == 1 and ((i < 6 and player == 0) or (i > 6 and i < 13 and player == 1)):
+        # last seed lands in an empty pit on player's side
+        opposite = 12 - i
+        nextBoard[player * 7 + 6] += nextBoard[opposite] + 1
+        nextBoard[opposite] = 0
+    nextBoard[14] = 1 - player  # switch player
+    return nextBoard
+
+def minimax(board, depth, maximizingPlayer):
+    """Apply the minimax algorithm to determine the best move for the current player."""
+    if depth == 0 or board[6] == 0 or board[13] == 0:
+        return evaluate(board)
+    if maximizingPlayer:
+        bestValue = -float("inf")
+        for move in generate_moves(state):
+            nextBoard = apply_move(state, move)
+            value = minimax(nextBoard, depth-1, False)
+            bestValue = max(bestValue, value)
+        return bestValue
+    else:
+        bestValue = float("inf")
+        for move in generate_moves(state):
+            nextBoard = apply_move(state, move)
+            value = minimax(nextBoard, depth-1, True)
+            bestValue = min(bestValue, value)
+        return bestValue
+
+def choose_move(board, depth):
+    """Choose the best move for the current player."""
+    moves = generate_moves(board)
+    bestValue = -float("inf")
+    bestMove = None
+    for move in moves:
+        nextBoard = apply_move(state, move)
+        value = minimax(nextBoard, depth-1, False)
+        if value > bestValue:
+            bestValue = value
+            bestMove = move
+    return bestMove
+
+# Example usage
+state = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0]  # starting state
+print("Current state:", state)
+move = choose_move(state, 3)
+print("Best move:", move)
+nextState = apply_move(state, move)
+print("Next state:", nextState)
