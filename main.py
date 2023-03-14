@@ -87,9 +87,9 @@ def generate_moves(board):
 
 def apply_move(board, move):
     """Apply the selected move to the current state of the game."""
-    player = state[14]  # current player
+    player = board[14]  # current player
     nextBoard = board.copy()
-    seeds = nextState[move]
+    seeds = nextBoard[move]
     nextBoard[move] = 0
     i = move + 1
     while seeds > 0:
