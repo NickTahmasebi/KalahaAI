@@ -4,7 +4,7 @@
 board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
 # Function to print the board
-def print_board():
+def print_board(): #Seb
     print("  {12}{11}{10}{9}{8}{7}\n")
 
     print("   ", end="")
@@ -18,7 +18,7 @@ def print_board():
     print("   {0}{1}{2}{3}{4}{5}")
 
 # Function to check if a move is valid
-def is_valid_move(player, hole):
+def is_valid_move(player, hole): #Nick
     if player == 1 and hole < 6 and board[hole] != 0:
         return True
     elif player == 2 and hole > 6 and hole < 13 and board[hole] != 0:
@@ -27,7 +27,7 @@ def is_valid_move(player, hole):
         return False
 
 # Function to make a move
-def make_move(player, hole):
+def make_move(player, hole): #Hylle
     stones = board[hole]
     board[hole] = 0
     while stones > 0:
@@ -41,9 +41,8 @@ def make_move(player, hole):
 
 
 
-
 # Function to check if the game is over
-def is_game_over():
+def is_game_over(): #Valde
     if sum(board[0:6]) == 0 or sum(board[7:13]) == 0:
         return True
     else:
@@ -51,13 +50,7 @@ def is_game_over():
 
 # Function to determine the winner
 
-
-
-def evaluate(board):
-    """Evaluate the current state of the board."""
-    return board[6] - board[13]  # difference between player's Kalaha and opponent's Kalaha
-
-def generate_moves(board):
+def generate_moves(board): #Hylle
     """Generate all possible moves for the current player."""
     moves = []
     for i in range(6):
@@ -65,7 +58,12 @@ def generate_moves(board):
             moves.append(i)
     return moves
 
-def apply_move(board, move):
+def evaluate(board): #Seb
+    """Evaluate the current state of the board."""
+    return board[6] - board[13]  # difference between player's Kalaha and opponent's Kalaha
+
+
+def apply_move(board, move): #Nick
     """Apply the selected move to the current state of the game."""
     player = board[13]  # current player
     nextBoard = board.copy()
@@ -92,7 +90,7 @@ def apply_move(board, move):
     nextBoard[13] = 1 - player  # switch player
     return nextBoard
 
-def minimax(board, depth, maximizingPlayer):
+def minimax(board, depth, maximizingPlayer): #Valde
     """Apply the minimax algorithm to determine the best move for the current player."""
     if depth == 0 or board[6] == 0 or board[13] == 0:
         return evaluate(board)
@@ -111,7 +109,7 @@ def minimax(board, depth, maximizingPlayer):
             bestValue = min(bestValue, value)
         return bestValue
 
-def choose_move(board, depth):
+def choose_move(board, depth): #Hylle
     """Choose the best move for the current player."""
     moves = generate_moves(board)
     bestValue = -float("inf")
@@ -124,17 +122,9 @@ def choose_move(board, depth):
             bestMove = move
     return bestMove
 
-# Example usage
-# state = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0]  # starting state
-# print("Current state:", state)
-# move = choose_move(state, 3)
-# print("Best move:", move)
-# nextState = apply_move(state, move)
-# print("Next state:", nextState)
 
 
-
-def determine_winner():
+def determine_winner(): #Seb
     if board[6] > board[13]:
         print("Player 1 wins!")
     elif board[6] < board[13]:
