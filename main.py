@@ -137,10 +137,10 @@ def play_game():
         move = choose_move(board, 8)
         if(player==1):
             print("Best move:", move)
+            hole = int(input("Player " + str(player) + ", choose a hole (0-5):  "))
+        else:
+            hole = int(input("Player " + str(player) + ", choose a hole (7-12):  "))
 
-
-
-        hole = int(input("Player " + str(player) + ", choose a hole (0-5 or 7-12): "))
         if is_valid_move(player, hole):
             make_move(player, hole)
             if player == 1:
