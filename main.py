@@ -122,9 +122,6 @@ def choose_move(board, depth): #Hylle
             bestMove = move
     return bestMove
 
-
-
-
 def determine_winner():
     if board[6] > board[13]:
         print("Player 1 wins!")
