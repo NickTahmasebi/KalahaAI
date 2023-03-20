@@ -130,25 +130,26 @@ def determine_winner():
     else:
         print("It's a tie!")
 
+def play_game():
+    player = 1
+    while not is_game_over():
+        print_board()
+        move = choose_move(board, 8)
+        if(player==1):
+            print("Best move:", move)
 
-# Main game loop
-player = 1
-while not is_game_over():
-    print_board()
-    move = choose_move(board, 8)
-    if (player == 1):
-        print("Best move:", move)
-        hole = int(input("Player " + str(player) + ", choose a hole (0-5): "))
-    else:
-        hole = int(input("Player " + str(player) + ", choose a hole (7-12): "))
-    if is_valid_move(player, hole):
-        make_move(player, hole)
-        if player == 1:
-            player = 2
+
+
+        hole = int(input("Player " + str(player) + ", choose a hole (0-5 or 7-12): "))
+        if is_valid_move(player, hole):
+            make_move(player, hole)
+            if player == 1:
+                player = 2
+            else:
+                player = 1
         else:
-            player = 1
-    else:
-        print("Invalid move. Please try again. ")
+            print("Invalid move. Please try again. ")
 
-print_board()
+
+play_game()
 determine_winner()
